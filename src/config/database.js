@@ -9,5 +9,8 @@ const dynamoDB = new AWS.DynamoDB.DocumentClient({
 });
   
 const USERS_TABLE = "Users";
+const TEMPLATES_TABLE = "templates";
 
-module.exports = { dynamoDB, USERS_TABLE }   
+const BUCKET_NAME = "foliohub-templates";
+
+module.exports = { dynamoDB, USERS_TABLE, TEMPLATES_TABLE, BUCKET_NAME }   

@@ -27,7 +27,7 @@ const UserService = {
         if (!isMatch) throw new Error("Invalid credentials");
 
         // Generate JWT token
-        const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, { expiresIn: "8h" });
         return token;
     },
 

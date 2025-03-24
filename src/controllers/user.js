@@ -30,7 +30,7 @@ const UserController = {
     async getUser(req, res) {
         try {
             const user = await UserService.currentUser(req.user.email);
-            res.status(201).json({ username: user.username, email: user.email });
+            res.status(200).json({ username: user.username, email: user.email });
         } catch (error) {
             res.status(400).json({ error: error.message });
         }
