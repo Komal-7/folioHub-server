@@ -8,6 +8,15 @@ const TemplateController = {
         } catch (error) {
             res.status(400).json({ error: error.message });
         }
+    },
+    async getTemplateById(req,res){
+        try {
+            const templateId = req.params.id;
+            const template = await TemplateService.templateById(templateId);
+            res.status(200).json({ template: template });
+        } catch (error) {
+            res.status(400).json({ error: error.message });
+        }
     }
 };
 

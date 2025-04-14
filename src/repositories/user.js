@@ -13,10 +13,14 @@ const UserRepository = {
     async getUserByEmail(email) {
         const params = {
             TableName: USERS_TABLE,
-            Key: { email },
+            IndexName: "email-index",
+            KeyConditionExpression: "email = :email",
+            ExpressionAttributeValues: {
+              ":email": email
+            }
         };
-        const result = await dynamoDB.get(params).promise();
-        return result.Item;
+        const result = await dynamoDB.query(params).promise();
+        return result.Items?.[0];
     }
 };
 

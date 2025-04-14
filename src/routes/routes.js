@@ -11,6 +11,7 @@ router.post("/login", UserController.login);
 router.get("/user", authenticateUser, UserController.getUser);
 router.post("/logout", UserController.logout);
 
-router.get("/templates", TemplateController.getTemplates)
+router.get("/templates", TemplateController.getTemplates);
+router.get("/template/:id", TemplateController.getTemplateById)
 
 module.exports = router;

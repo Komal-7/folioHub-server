@@ -9,6 +9,15 @@ const TemplateService = {
             ...template,
             s3_preview: generateSignedUrl(template.s3_preview),
         }));
+    },
+    async templateById(templateId){
+        const template = await TemplateRepository.getTemplateById(templateId);
+        if (!template) throw new Error("Something went wrong, try again later");
+        return {
+            ...template,
+            s3_html: generateSignedUrl(template.s3_html),
+            s3_css: generateSignedUrl(template.s3_css),
+        };
     }
 };
 

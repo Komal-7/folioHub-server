@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const UserRepository = require("../repositories/user");
+const { v4: uuidv4 } = require("uuid");
 
 const UserService = {
     async registerUser(userData) {
@@ -15,13 +16,13 @@ const UserService = {
         const hashedPassword = await bcrypt.hash(password, salt);
 
         // Store user
-        const newUser = { user_id: '1' ,email, password: hashedPassword, username };
+        const newUser = { user_id: uuidv4() ,email, password: hashedPassword, username };
         return await UserRepository.createUser(newUser);
     },
 
     async loginUser(email, password) {
         const user = await UserRepository.getUserByEmail(email);
-        if (!user) throw new Error("Invalid credentials");
+        if (!user) throw new Error("User doesn't exist");
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) throw new Error("Invalid credentials");
