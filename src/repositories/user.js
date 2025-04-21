@@ -21,6 +21,22 @@ const UserRepository = {
         };
         const result = await dynamoDB.query(params).promise();
         return result.Items?.[0];
+    },
+    async getUserById(user_id) {
+        const params = {
+            TableName: USERS_TABLE,
+            Key: {
+              user_id
+            },
+        };
+    
+        try {
+            const result = await dynamoDB.get(params).promise();
+            return result.Item; // null if not found
+        } catch (error) {
+            console.error("Error getting user:", error);
+            throw error;
+        }
     }
 };
 

@@ -2,6 +2,7 @@ const express = require("express");
 const UserController = require("../controllers/user");
 const authenticateUser = require("../middlewares/authenticateUser");
 const TemplateController = require("../controllers/template");
+const ProjectController = require("../controllers/project");
 
 
 const router = express.Router();
@@ -12,6 +13,10 @@ router.get("/user", authenticateUser, UserController.getUser);
 router.post("/logout", UserController.logout);
 
 router.get("/templates", TemplateController.getTemplates);
-router.get("/template/:id", TemplateController.getTemplateById)
+router.get("/template/:id", TemplateController.getTemplateById);
+
+router.post("/save-project", authenticateUser, ProjectController.saveProject);
+
+// router.post('/deploy', authenticateUser, ProjectController.deployProject);
 
 module.exports = router;

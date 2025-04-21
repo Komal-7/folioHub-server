@@ -1,5 +1,5 @@
 const TemplateRepository = require("../repositories/template");
-const generateSignedUrl = require("../middlewares/generateSignedUrl");
+const {generateSignedUrl} = require("../middlewares/s3");
 
 const TemplateService = {
     async globalTemplates(){
@@ -15,8 +15,7 @@ const TemplateService = {
         if (!template) throw new Error("Something went wrong, try again later");
         return {
             ...template,
-            s3_html: generateSignedUrl(template.s3_html),
-            s3_css: generateSignedUrl(template.s3_css),
+            template_json: generateSignedUrl(template.template_json)
         };
     }
 };

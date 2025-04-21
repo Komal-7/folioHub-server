@@ -28,12 +28,12 @@ const UserService = {
         if (!isMatch) throw new Error("Invalid credentials");
 
         // Generate JWT token
-        const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, { expiresIn: "8h" });
+        const token = jwt.sign({ user_id: user.user_id }, process.env.JWT_SECRET, { expiresIn: "8h" });
         return token;
     },
 
-    async currentUser(email){
-        const user = await UserRepository.getUserByEmail(email);
+    async currentUser(user_id){
+        const user = await UserRepository.getUserById(user_id);
         if (!user) throw new Error("Invalid credentials");
         return user;
     }
