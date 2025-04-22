@@ -18,6 +18,7 @@ const UserController = {
             res.cookie("authToken", token, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
+                sameSite: "none",
                 maxAge: 3600000, // 1 hour
             });
 
