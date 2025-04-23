@@ -80,4 +80,47 @@ const uploadAssestsToS3 = async (user_id,files) => {
   return uploadedAssets;
 };
 
-module.exports = {generateSignedUrl, uploadProjectJsonToS3, uploadProjectHtmlToS3, getHtmlFromS3, uploadAssestsToS3};
+const getAssetsFromS3 = async(user_id) => {
+  const params = {
+    Bucket: USER_ASSETS,
+    Prefix: `${user_id}/`,
+  };
+
+  const listedObjects = await s3.listObjectsV2(params).promise();
+
+  const assets = listedObjects.Contents.map((obj) => {
+    const key = obj.Key;
+    const url = `https://${USER_ASSETS}.s3.amazonaws.com/${key}`;
+    const name = key.split('/').pop();
+    return {
+      src: url,
+      name,
+      // size: obj.Size,
+      // mimeType is optional unless needed
+    };
+  });
+
+  return assets;
+};
+
+const deleteAssetsFromS3 = async(user_id,assets) => {
+  const objectsToDelete = assets.map((asset) => ({
+    Key: `${user_id}/${asset.name}`
+  }));
+
+  const params = {
+    Bucket: USER_ASSETS,
+    Delete: { Objects: objectsToDelete }
+  };
+
+  await s3.deleteObjects(params).promise();
+};
+
+module.exports = {generateSignedUrl, 
+                  uploadProjectJsonToS3, 
+                  uploadProjectHtmlToS3, 
+                  getHtmlFromS3, 
+                  uploadAssestsToS3, 
+                  getAssetsFromS3,
+                  deleteAssetsFromS3
+                };

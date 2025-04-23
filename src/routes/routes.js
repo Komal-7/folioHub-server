@@ -18,7 +18,9 @@ router.post("/logout", UserController.logout);
 router.get("/templates", TemplateController.getTemplates);
 router.get("/template/:id", TemplateController.getTemplateById);
 
-router.post('/upload', authenticateUser, upload.array('files'), AssetsController.uploadAssets);
+router.post('/assets', authenticateUser, upload.array('files'), AssetsController.uploadAssets);
+router.get('/assets', authenticateUser, AssetsController.loadAssets);
+router.delete('/assets', authenticateUser, AssetsController.deleteAssets);
 
 router.post("/save-project", authenticateUser, ProjectController.saveProject);
 router.post('/deploy', authenticateUser, ProjectController.deployProject);
