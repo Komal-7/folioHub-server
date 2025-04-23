@@ -1,11 +1,13 @@
+const path = require('path');
+const { v4: uuidv4 } = require("uuid");
 const AWS = require("aws-sdk");
+const { BUCKET_NAME, PROJECT_BUCKET, USER_DEPLOYMENT, USER_ASSETS } = require("../config/database");
+
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: process.env.AWS_REGION,
 });
-const { BUCKET_NAME, PROJECT_BUCKET, USER_DEPLOYMENT } = require("../config/database");
-
 
 const generateSignedUrl = (objectKey) => {
   const params = {
@@ -39,14 +41,43 @@ const uploadProjectHtmlToS3 = async (key,data) => {
   await s3.putObject(params).promise();
 };
 
-const getProjectHtml = async (sitename) => {
+const getHtmlFromS3 = async (sitename) => {
   const params = {
     Bucket: USER_DEPLOYMENT,
     Key: `${sitename}.html`,
   };
-
+  
   const data = await s3.getObject(params).promise();
   return data.Body.toString('utf-8');
 };
 
-module.exports = {generateSignedUrl, uploadProjectJsonToS3, uploadProjectHtmlToS3, getProjectHtml};
+const uploadAssestsToS3 = async (user_id,files) => {
+  const uploadedAssets = [];
+
+  for (const file of files) {
+    const file_id = uuidv4()
+    const filename = `${path.basename(file.originalname,path.extname(file.originalname))}@${file_id}${path.extname(file.originalname)}`;
+    const s3Key = `${user_id}/${filename}`;
+
+    const uploadParams = {
+      Bucket: USER_ASSETS,
+      Key: s3Key,
+      Body: file.buffer,
+      ContentType: file.mimetype
+    };
+
+    await s3.putObject(uploadParams).promise();
+
+    uploadedAssets.push({
+      id: file_id,
+      src: `https://${USER_ASSETS}.s3.amazonaws.com/${s3Key}`,
+      name: file.originalname,
+      mimeType: file.mimetype,
+      size: file.size,
+    });
+  }
+
+  return uploadedAssets;
+};
+
+module.exports = {generateSignedUrl, uploadProjectJsonToS3, uploadProjectHtmlToS3, getHtmlFromS3, uploadAssestsToS3};

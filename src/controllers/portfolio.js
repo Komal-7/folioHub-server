@@ -4,7 +4,7 @@ const PortfolioController = {
     async getUserPortfolio(req,res) {
         const { sitename } = req.params;
         try {
-            const html = await PortfolioService.getHtmlFromS3(sitename);
+            const html = await PortfolioService.getProjectHtml(sitename);
             res.setHeader('Content-Type', 'text/html');
             res.send(html);
         } catch (err) {

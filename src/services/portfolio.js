@@ -1,8 +1,8 @@
-const { getProjectHtml } = require("../middlewares/s3");
+const { getHtmlFromS3 } = require("../middlewares/s3");
 
 const PortfolioService = {
-    async getHtmlFromS3(sitename) {
-        return await getProjectHtml(sitename);
+    async getProjectHtml(sitename) {
+        return await getHtmlFromS3(sitename);
     }
 };
 
