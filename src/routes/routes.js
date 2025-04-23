@@ -3,6 +3,7 @@ const UserController = require("../controllers/user");
 const authenticateUser = require("../middlewares/authenticateUser");
 const TemplateController = require("../controllers/template");
 const ProjectController = require("../controllers/project");
+const PortfolioController = require("../controllers/portfolio")
 
 
 const router = express.Router();
@@ -16,7 +17,8 @@ router.get("/templates", TemplateController.getTemplates);
 router.get("/template/:id", TemplateController.getTemplateById);
 
 router.post("/save-project", authenticateUser, ProjectController.saveProject);
+router.post('/deploy', authenticateUser, ProjectController.deployProject);
 
-// router.post('/deploy', authenticateUser, ProjectController.deployProject);
+router.get('/portfolio/:sitename', PortfolioController.getUserPortfolio);
 
 module.exports = router;

@@ -4,7 +4,7 @@ const s3 = new AWS.S3({
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: process.env.AWS_REGION,
 });
-const { BUCKET_NAME, PROJECT_BUCKET } = require("../config/database");
+const { BUCKET_NAME, PROJECT_BUCKET, USER_DEPLOYMENT } = require("../config/database");
 
 
 const generateSignedUrl = (objectKey) => {
@@ -28,4 +28,25 @@ const uploadProjectJsonToS3 = async (key, data) => {
   await s3.putObject(params).promise();
 };
 
-module.exports = {generateSignedUrl, uploadProjectJsonToS3};
+const uploadProjectHtmlToS3 = async (key,data) => {
+  const params = {
+    Bucket: USER_DEPLOYMENT,
+    Key: key,
+    Body: data,
+    ContentType: "text/html",
+  };
+
+  await s3.putObject(params).promise();
+};
+
+const getProjectHtml = async (sitename) => {
+  const params = {
+    Bucket: USER_DEPLOYMENT,
+    Key: `${sitename}.html`,
+  };
+
+  const data = await s3.getObject(params).promise();
+  return data.Body.toString('utf-8');
+};
+
+module.exports = {generateSignedUrl, uploadProjectJsonToS3, uploadProjectHtmlToS3, getProjectHtml};

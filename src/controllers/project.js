@@ -16,6 +16,17 @@ const ProjectController = {
             console.error("Controller Error:", error);
             res.status(500).json({ error: error.message });
         }
+    },
+    async deployProject(req,res) {
+        const { project_id, html, sitename } = req.body;
+        const user_id = req.user.user_id;
+        try {
+            const result = await ProjectService.deployProject({ user_id, project_id, html, sitename });
+            res.status(200).json(result);
+        } catch (error) {
+            console.error('Controller Error:', error);
+            res.status(500).json({ error: 'Failed to deploy project' });
+        }
     }
 };
 

@@ -14,5 +14,6 @@ const PROJECTS_TABLE = "User_Projects"
 
 const BUCKET_NAME = "foliohub-templates";
 const PROJECT_BUCKET = "foliohub-user-projects"
+const USER_DEPLOYMENT = "foliohub-user-deployments"
 
-module.exports = { dynamoDB, USERS_TABLE, TEMPLATES_TABLE, BUCKET_NAME, PROJECT_BUCKET, PROJECTS_TABLE }   
+module.exports = { dynamoDB, USERS_TABLE, TEMPLATES_TABLE, BUCKET_NAME, PROJECT_BUCKET, PROJECTS_TABLE, USER_DEPLOYMENT }   
