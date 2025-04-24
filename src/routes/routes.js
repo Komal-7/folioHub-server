@@ -22,6 +22,7 @@ router.post('/assets', authenticateUser, upload.array('files'), AssetsController
 router.get('/assets', authenticateUser, AssetsController.loadAssets);
 router.delete('/assets', authenticateUser, AssetsController.deleteAssets);
 
+router.get('/projects', authenticateUser, ProjectController.getAllProjects)
 router.post("/save-project", authenticateUser, ProjectController.saveProject);
 router.post('/deploy', authenticateUser, ProjectController.deployProject);
 

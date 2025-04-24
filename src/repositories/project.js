@@ -15,6 +15,18 @@ const getDeployedProjectByUser = async (user_id) => {
 }
   
 const ProjectRepository = {
+
+    async getAllProjects(user_id) {
+        const params = {
+            TableName: PROJECTS_TABLE,
+            KeyConditionExpression: 'user_id = :uid',
+            ExpressionAttributeValues: {
+            ':uid': user_id,
+            }
+        };
+        const result = await dynamoDB.query(params).promise();
+        return result.Items || [];
+    },
     async getProjectById(user_id, project_id) {
         const params = {
             TableName: PROJECTS_TABLE,

@@ -1,9 +1,17 @@
 const ProjectRepository = require("../repositories/project");
 const { v4: uuidv4 } = require("uuid");
-const { uploadProjectJsonToS3, uploadProjectHtmlToS3 } = require("../middlewares/s3");
+const { uploadProjectJsonToS3, uploadProjectHtmlToS3, generateSignedUrl } = require("../middlewares/s3");
+const { PROJECT_BUCKET } = require("../config/database")
 const ProjectService = {
+    async allProjects(user_id) {
+        const projects = await ProjectRepository.getAllProjects(user_id);
+        return projects.map((project) => ({
+            ...project,
+            s3Key: generateSignedUrl(PROJECT_BUCKET,project.s3Key),
+        }));
+    },
     async saveOrUpdateProject(projectData) {
-        const { user_id, project_json, project_id } = projectData;
+        const { user_id, project_json, project_id, project_name } = projectData;
         const isNew = !project_id;
         const finalProjectId = isNew ? uuidv4() : project_id;
         const objectKey = `${user_id}/${finalProjectId}.json`;
@@ -26,6 +34,7 @@ const ProjectService = {
         // Save or overwrite in DynamoDB
         await ProjectRepository.upsertProject({
             user_id,
+            project_name,
             project_id: finalProjectId,
             s3Key: objectKey,
             updatedAt: new Date().toISOString(),

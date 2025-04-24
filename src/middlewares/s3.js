@@ -9,9 +9,9 @@ const s3 = new AWS.S3({
   region: process.env.AWS_REGION,
 });
 
-const generateSignedUrl = (objectKey) => {
+const generateSignedUrl = (bucket,objectKey) => {
   const params = {
-    Bucket: BUCKET_NAME,
+    Bucket: bucket,
     Key: objectKey,
     Expires: 60 * 2
   };
